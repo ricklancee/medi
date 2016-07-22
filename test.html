@@ -6,7 +6,15 @@
 <body>
   <script src="mediator.js"></script>
   <script>
+    import Mediator from 'mediator';
 
+    var medi = new Mediator();
+
+    medi.when('somethingHappend', data => {
+      console.log(data);
+    });
+
+    medi.emit('somethingHappend', {foo: 'bar'});
 
   </script>
 </body>
