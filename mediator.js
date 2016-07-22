@@ -31,12 +31,26 @@ class Mediator {
     return this;
   }
 
-  delete(channel) {
+  delete(channel, handler=null) {
     if (!this._channels[channel]) {
       return false;
     }
 
-    delete this._channels[channel];
+    if (!handler) {
+      delete this._channels[channel];
+    } else {
+      const index = this._channels.findIndex(channelHandler => {
+        if (channelHandler === handler) {
+          return true;
+        }
+      });
+
+      if (index === -1) {
+        return false;
+      }
+
+      this._channels.splice(index, 1);
+    }
 
     return this;
   }
