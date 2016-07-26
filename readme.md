@@ -52,10 +52,6 @@ obj.when('something', data => {
   console.log(data); // 'foo'
 });
 
-M.when('something', data => {
-  console.log(data); // 'foo'
-});
-
 obj.emit('somethingHappend', 'foo');
 
 ```
