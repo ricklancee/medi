@@ -55,3 +55,44 @@ obj.when('something', data => {
 obj.emit('somethingHappend', 'foo');
 
 ```
+
+
+### Loose coupling example.
+
+```js
+import Mediator from 'mediator';
+
+var M = new Mediator();
+
+var user = {
+  name: null, 
+  register: function() {
+  
+    // Code to register the user
+  
+    M.emit('userHasRegistered', user);
+  }
+};
+
+var notificationModal = {
+  show: function(message) {
+    // code to show a modal.
+  },
+  init: function() {
+    M.when('userHasRegistered', user => {
+      notificationModal.show(`Welcome! ${user.name}`);
+    });
+  }  
+};
+
+// App bootstrap code
+notificationModal.init();
+
+// Register a new user
+user.name = 'Jane Doe';
+user.subscribe();
+
+// Notification model is triggered because 
+// user object emits the 'userHasRegistered' event.
+
+```
