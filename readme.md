@@ -37,7 +37,7 @@ M.emit('somethingHappend', 'foo', 'bar', 'baz');
 
 ```
 
-### Extending objects
+### Extending objects (not implemented yet)
 
 ```js
 import Mediator from 'mediator';
