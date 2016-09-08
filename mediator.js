@@ -11,7 +11,7 @@ class Mediator {
       this._channels[channel] = [];
     }
 
-    mediator._channels[channel].push(handler);
+    this._channels[channel].push(handler);
 
     return this;
   }
@@ -24,7 +24,7 @@ class Mediator {
     var length = this._channels[channel].length;
 
     for (let i = 0; i < length; i++) {
-      let subscription = mediator._channels[channel][i];
+      let subscription = this._channels[channel][i];
       subscription.apply(null, args);
     }
 
@@ -39,7 +39,7 @@ class Mediator {
     if (!handler) {
       delete this._channels[channel];
     } else {
-      const index = this._channels.findIndex(channelHandler => {
+      const index = this._channels[channel].findIndex(channelHandler => {
         if (channelHandler === handler) {
           return true;
         }
@@ -49,11 +49,10 @@ class Mediator {
         return false;
       }
 
-      this._channels.splice(index, 1);
+      this._channels[channel].splice(index, 1);
     }
 
     return this;
   }
 }
 
-export default Mediator;

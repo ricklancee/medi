@@ -6,14 +6,30 @@
 <body>
   <script src="mediator.js"></script>
   <script>
-    import Mediator from 'mediator';
-
     var medi = new Mediator();
 
     medi.when('somethingHappend', data => {
       console.log(data);
     });
 
+    var func = function(data) {
+      console.log('func', data);
+    };
+
+    medi.when('somethingHappend', func);
+
+    medi.emit('somethingHappend', {foo: 'bar'});
+
+    // Delete a specific handler.
+    medi.delete('somethingHappend', func);
+
+    // only fires one
+    medi.emit('somethingHappend', {foo: 'bar'});
+
+    // Delete all
+    medi.delete('somethingHappend');
+
+    // Should not log anything
     medi.emit('somethingHappend', {foo: 'bar'});
 
   </script>
