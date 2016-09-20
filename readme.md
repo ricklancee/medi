@@ -37,26 +37,6 @@ M.emit('somethingHappend', 'foo', 'bar', 'baz');
 
 ```
 
-### Extending objects (not implemented yet)
-
-```js
-import Mediator from 'mediator';
-
-var M = new Mediator();
-
-var obj = {};
-
-M.extend(obj);
-
-obj.when('something', data => {
-  console.log(data); // 'foo'
-});
-
-obj.emit('somethingHappend', 'foo');
-
-```
-
-
 ### Loose coupling example.
 
 ```js
