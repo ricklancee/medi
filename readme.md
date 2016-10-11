@@ -8,8 +8,6 @@ From wikipedia: "[A mediator] promotes loose coupling by keeping objects from re
 ### Basic Usage
 
 ```js
-import Mediator from 'mediator';
-
 var M = new Mediator();
 
 M.when('somethingHappend', data => {
@@ -23,8 +21,6 @@ M.emit('somethingHappend', { foo: 'bar' });
 ### Using multiple arguments. 
 
 ```js
-import Mediator from 'mediator';
-
 var M = new Mediator();
 
 M.when('somethingHappend', (foo, bar, baz) => {
@@ -40,16 +36,12 @@ M.emit('somethingHappend', 'foo', 'bar', 'baz');
 ### Loose coupling example.
 
 ```js
-import Mediator from 'mediator';
-
 var M = new Mediator();
 
 var user = {
   name: null, 
   register: function() {
-  
     // Code to register the user
-  
     M.emit('userHasRegistered', user);
   }
 };
@@ -72,7 +64,8 @@ notificationModal.init();
 user.name = 'Jane Doe';
 user.subscribe();
 
-// Notification model is triggered because 
-// user object emits the 'userHasRegistered' event.
+// Now the the Notification model will be triggered becuase
+// it is listening for the 'userHasRegistered'  which has been emitted
+// by the user object (facilitated by the mediator).
 
 ```
