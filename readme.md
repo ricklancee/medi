@@ -33,6 +33,21 @@ M.emit('somethingHappend', 'foo', 'bar', 'baz');
 
 ```
 
+### Extending existing objects with mediator behaviour
+```js
+var object = {
+};
+
+medi.extend(object);
+
+medi.when('foo', (msg) => {console.log('on mediator: '+msg)});
+object.when('foo', (msg) => {console.log('on object: '+msg)});
+
+object.emit('foo', 'from object, bar');
+medi.emit('foo', 'from mediator, baz');
+
+```
+
 ### Loose coupling example.
 
 ```js

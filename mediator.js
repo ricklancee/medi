@@ -54,5 +54,10 @@ class Mediator {
 
     return this;
   }
+
+  extend(extendee) {
+    extendee.emit = Mediator.prototype.emit.bind(this);
+    extendee.when = Mediator.prototype.when.bind(this);
+  }
 }
 
