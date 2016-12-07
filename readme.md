@@ -4,7 +4,6 @@
 
 From wikipedia: "[A mediator] promotes loose coupling by keeping objects from referring to each other explicitly, and it allows their interaction to be varied independently."
 
-
 #### Basic example
 
 ```js
@@ -115,3 +114,6 @@ user.register();
 The two components do not explicitly know about each others existance they only listen to
 the events on the mediator and act on those.
 
+### Testing
+
+Install dependencies with `npm install` and run `npm test` or `npm test -- --watch` for watching
