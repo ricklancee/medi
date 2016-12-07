@@ -1,0 +1,33 @@
+{
+  "name": "mediator",
+  "version": "1.0.0",
+  "description": "### What is an mediator?",
+  "main": "mediator.js",
+  "scripts": {
+    "test": "./node_modules/.bin/ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricklancee/mediator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ricklancee/mediator/issues"
+  },
+  "homepage": "https://github.com/ricklancee/mediator#readme",
+  "devDependencies": {
+    "ava": "^0.17.0",
+    "sinon": "^1.17.6"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015-node4"
+    ]
+  }
+}
