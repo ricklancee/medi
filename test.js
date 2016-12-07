@@ -54,7 +54,6 @@ test('delete a specific handler on a channel', t => {
   t.true(calledHandlerFn.calledWith('somemessage'));
 });
 
-
 test('filter message handlers', t => {
   const notCalledHandlerFn = sinon.spy();
   const calledHandlerFn = sinon.spy();
