@@ -1,10 +1,10 @@
 import test from 'ava';
 import sinon from 'sinon';
-import Mediator from './mediator';
+import mediator from './mediator';
 
 let bus;
 test.beforeEach(t => {
-  bus = new Mediator();
+  bus = mediator();
 });
 
 test('handler a message', t => {
