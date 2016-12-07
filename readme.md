@@ -5,53 +5,97 @@
 From wikipedia: "[A mediator] promotes loose coupling by keeping objects from referring to each other explicitly, and it allows their interaction to be varied independently."
 
 
-### Basic Usage
+#### Basic example
 
 ```js
-var M = new Mediator();
+const bus = mediator();
 
-M.when('somethingHappend', data => {
+bus.when('somethingHappend', data => {
   console.log(data); // {foo: 'bar'}
 });
 
-M.emit('somethingHappend', { foo: 'bar' });
+bus.emit('somethingHappend', { foo: 'bar' });
 
 ```
 
-### Using multiple arguments.
+#### Deleting an channel
 
 ```js
-var M = new Mediator();
+const bus = mediator();
 
-M.when('somethingHappend', (foo, bar, baz) => {
-  console.log(foo); // 'foo'
-  console.log(bar); // 'bar'
-  console.log(baz); // 'baz'
-});
+const notCalledHandler = data => {
+  console.log(data);
+};
 
-M.emit('somethingHappend', 'foo', 'bar', 'baz');
+bus.when('somethingHappend', notCalledHandler); // handler will not be called
+bus.delete('somethingHappend');
+bus.emit('somethingHappend', { foo: 'bar' });
 
 ```
 
-### Loose coupling example.
+#### Deleting an specific handler on a channel
 
 ```js
-var M = new Mediator();
+const bus = mediator();
 
-var user = {
+const calledHandler = data => {
+  console.log(data);
+};
+
+const notCalledHandler = data => {
+  console.log(data);
+};
+
+bus.when('somethingHappend', notCalledHandler); // will not be called
+bus.when('somethingHappend', calledHandler); // will be called
+bus.delete('somethingHappend', notCalledHandler);
+bus.emit('somethingHappend', { foo: 'bar' });
+
+```
+
+#### Filtering events
+```js
+
+const bus = mediator();
+
+const filter = {
+  someprop: 'matchingvalue'
+};
+
+const notMatchingFilter = {
+  someprop: 'notmatchingvalue'
+}
+
+const handler = data => {
+  console.log(data);
+};
+
+
+bus.when('somethingHappend', filter, handler);
+bus.emit('somethingHappend', filter, { foo: 'bar' });
+bus.emit('somethingHappend', notMatchingFilter, { foo: 'bar' }); // will not trigger the handler
+
+```
+
+#### Loose coupling example.
+
+```js
+const bus = mediator();
+
+const user = {
   name: null,
   register: function() {
     // Code to register the user
-    M.emit('userHasRegistered', user);
+    bus.emit('userHasRegistered', user);
   }
 };
 
-var notificationModal = {
+const notificationModal = {
   show: function(message) {
     // code to show a modal.
   },
   init: function() {
-    M.when('userHasRegistered', user => {
+    bus.when('userHasRegistered', user => {
       notificationModal.show(`Welcome! ${user.name}`);
     });
   }
@@ -62,7 +106,9 @@ notificationModal.init();
 
 // Register a new user
 user.name = 'Jane Doe';
-user.subscribe();
+user.register();
+// this will trigger the notification modal to show because
+// it's listing to the 'userHasRegistered' event that the user will emit.
 
 
 ```
