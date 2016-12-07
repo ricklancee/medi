@@ -6,12 +6,34 @@ class Mediator {
     this._channels = {};
   }
 
-  when(channel, handler) {
+  matchesFilter(filter, match) {
+    var keys = Object.keys(match), length = keys.length;
+    if (filter == null) return !length;
+    var obj = Object(filter);
+    for (var i = 0; i < length; i++) {
+      var key = keys[i];
+      if (match[key] !== obj[key] || !(key in obj)) return false;
+    }
+    return true;
+  }
+
+  when(channel, ...args) {
     if (!this._channels[channel]) {
       this._channels[channel] = [];
     }
 
-    this._channels[channel].push(handler);
+    let handler, filter;
+
+    if (args.length === 1) {
+      handler = args[0];
+      filter = null;
+    }
+
+    if (args.length === 2) {
+      [filter, handler] = args;
+    }
+
+    this._channels[channel].push({ filter, handler });
 
     return this;
   }
@@ -21,12 +43,21 @@ class Mediator {
       return;
     }
 
-    var length = this._channels[channel].length;
+    let payload, filter;
 
-    for (let i = 0; i < length; i++) {
-      let subscription = this._channels[channel][i];
-      subscription.apply(null, args);
+    if (args.length === 1) {
+      payload = args[0];
+      filter = null;
     }
+
+    if (args.length === 2) {
+      [filter, payload] = args;
+    }
+
+    this._channels[channel].forEach(({handler, filter: match}) => {
+      if (!filter || this.matchesFilter(filter, match))
+        handler(payload);
+    });
 
     return this;
   }
@@ -39,7 +70,7 @@ class Mediator {
     if (!handler) {
       delete this._channels[channel];
     } else {
-      const index = this._channels[channel].findIndex(channelHandler => {
+      const index = this._channels[channel].findIndex(({handler: channelHandler}) => {
         if (channelHandler === handler) {
           return true;
         }

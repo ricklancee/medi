@@ -28,16 +28,6 @@ test('multiple handlers will be called', t => {
   t.true(handlerTwoFn.calledWith('somemessage'));
 });
 
-test('handler a message with multiple parameters', t => {
-  const handlerFn = sinon.spy();
-
-  bus.when('somechannel', handlerFn);
-  bus.emit('somechannel', 'messageOne', 'messageTwo');
-
-  t.true(handlerFn.calledWith('messageOne', 'messageTwo'));
-});
-
-
 test('delete a channel', t => {
   const handlerFn = sinon.spy();
   bus.when('somechannel', handlerFn);
@@ -59,6 +49,20 @@ test('delete a specific handler on a channel', t => {
   bus.delete('somechannel', notCalledHandlerFn);
 
   bus.emit('somechannel', 'somemessage');
+
+  t.false(notCalledHandlerFn.called);
+  t.true(calledHandlerFn.calledWith('somemessage'));
+});
+
+
+test('filter message handlers', t => {
+  const notCalledHandlerFn = sinon.spy();
+  const calledHandlerFn = sinon.spy();
+
+  bus.when('somechannel', { someprop: 'notmatchingvalue' }, notCalledHandlerFn);
+  bus.when('somechannel', { someprop: 'valuetomatch' }, calledHandlerFn);
+
+  bus.emit('somechannel', { someprop: 'valuetomatch' }, 'somemessage');
 
   t.false(notCalledHandlerFn.called);
   t.true(calledHandlerFn.calledWith('somemessage'));
