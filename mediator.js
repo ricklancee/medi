@@ -6,14 +6,16 @@ class Mediator {
     this._channels = {};
   }
 
-  matchesFilter(filter, match) {
-    var keys = Object.keys(match), length = keys.length;
-    if (filter == null) return !length;
-    var obj = Object(filter);
-    for (var i = 0; i < length; i++) {
-      var key = keys[i];
-      if (match[key] !== obj[key] || !(key in obj)) return false;
+  _matchesFilter(filter, match) {
+    const keys = Object.keys(match);
+    const length = keys.length;
+
+    for (let key of keys) {
+      if (match[key] !== filter[key] || !(key in filter)) {
+        return false;
+      }
     }
+
     return true;
   }
 
@@ -54,9 +56,10 @@ class Mediator {
       [filter, payload] = args;
     }
 
-    this._channels[channel].forEach(({handler, filter: match}) => {
-      if (!filter || this.matchesFilter(filter, match))
+    this._channels[channel].forEach(({handler, filter: toMatch}) => {
+      if (!filter || this._matchesFilter(filter, toMatch)) {
         handler(payload);
+      }
     });
 
     return this;
