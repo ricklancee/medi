@@ -18,7 +18,7 @@ M.emit('somethingHappend', { foo: 'bar' });
 
 ```
 
-### Using multiple arguments. 
+### Using multiple arguments.
 
 ```js
 var M = new Mediator();
@@ -33,28 +33,13 @@ M.emit('somethingHappend', 'foo', 'bar', 'baz');
 
 ```
 
-### Extending existing objects with mediator behaviour
-```js
-var object = {
-};
-
-medi.extend(object);
-
-medi.when('foo', (msg) => {console.log('on mediator: '+msg)});
-object.when('foo', (msg) => {console.log('on object: '+msg)});
-
-object.emit('foo', 'from object, bar');
-medi.emit('foo', 'from mediator, baz');
-
-```
-
 ### Loose coupling example.
 
 ```js
 var M = new Mediator();
 
 var user = {
-  name: null, 
+  name: null,
   register: function() {
     // Code to register the user
     M.emit('userHasRegistered', user);
@@ -69,7 +54,7 @@ var notificationModal = {
     M.when('userHasRegistered', user => {
       notificationModal.show(`Welcome! ${user.name}`);
     });
-  }  
+  }
 };
 
 // App bootstrap code
