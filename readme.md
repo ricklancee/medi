@@ -64,8 +64,8 @@ notificationModal.init();
 user.name = 'Jane Doe';
 user.subscribe();
 
-// Now the the Notification model will be triggered because
-// it is listening for the 'userHasRegistered' event, which has been emitted
-// by the user object (facilitated by the mediator).
 
 ```
+The two components do not explicitly know about each others existance they only listen to
+the events on the mediator and act on those.
+
