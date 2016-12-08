@@ -6,7 +6,6 @@ const mediator = function mediator() {
 
   const matchesFilter = function(filter, match) {
     const keys = Object.keys(match);
-    const length = keys.length;
 
     for (let key of keys) {
       if (match[key] !== filter[key] || !(key in filter)) {
@@ -76,6 +75,8 @@ const mediator = function mediator() {
           if (channelHandler === handler) {
             return true;
           }
+
+          return false;
         });
 
         if (index === -1) {
