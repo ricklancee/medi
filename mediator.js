@@ -70,21 +70,22 @@ const mediator = function mediator() {
 
       if (!handler) {
         delete channels[channel];
-      } else {
-        const index = channels[channel].findIndex(({handler: channelHandler}) => {
-          if (channelHandler === handler) {
-            return true;
-          }
+        return this;
+      }
 
-          return false;
-        });
-
-        if (index === -1) {
-          return false;
+      const index = channels[channel].findIndex(({handler: channelHandler}) => {
+        if (channelHandler === handler) {
+          return true;
         }
 
-        channels[channel].splice(index, 1);
+        return false;
+      });
+
+      if (index === -1) {
+        return false;
       }
+
+      channels[channel].splice(index, 1);
 
       return this;
     }
