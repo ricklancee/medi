@@ -66,3 +66,12 @@ test('filter message handlers', t => {
   t.false(notCalledHandlerFn.called);
   t.true(calledHandlerFn.calledWith('somemessage'));
 });
+
+test('calling emit with a filter on a channel without a filter, should not work', t => {
+  const notCalledHandlerFn = sinon.spy();
+
+  bus.when('somechannel', notCalledHandlerFn);
+  bus.emit('somechannel', { someprop: 'somevalue' }, 'somemessage');
+
+  t.false(notCalledHandlerFn.called);
+});
