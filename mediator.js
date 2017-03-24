@@ -1,6 +1,6 @@
 "use strict";
 
-const mediator = function mediator(opts) {
+const mediator = function mediator(opts = { log:false }) {
   const channels = {};
   const shouldLog = opts.log || false;
 
