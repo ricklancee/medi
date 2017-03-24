@@ -1,8 +1,23 @@
 "use strict";
 
-const mediator = function mediator() {
-
+const mediator = function mediator(opts) {
   const channels = {};
+  const shouldLog = opts.log || false;
+
+  const log = {
+      info() {
+        if (!shouldLog)
+          return;
+
+        return console.info.apply(console, arguments);
+      },
+      warn() {
+        if (!shouldLog)
+          return;
+
+        return console.warn.apply(console, arguments);
+      }
+  };
 
   const matchesFilter = function(filter, match) {
     const keys = Object.keys(match);
@@ -40,7 +55,7 @@ const mediator = function mediator() {
 
     emit(channel, ...args) {
       if (!channels[channel]) {
-        console.warn(`Emit: No handlers for event: "${channel}", args: `, ...args);
+        log.warn(`Emit: No handlers for event: "${channel}", args: `, ...args);
         return;
       }
 
@@ -55,11 +70,11 @@ const mediator = function mediator() {
         [filter, payload] = args;
       }
 
-      console.info(`Emitting event: "${channel}" with payload:`, payload, ' and filter: ', filter);
+      log.info(`Emitting event: "${channel}" with payload:`, payload, ' and filter: ', filter);
 
       channels[channel].forEach(({handler, filter: toMatch}) => {
         if (!filter && toMatch) {
-          console.warn(`Trying to emit an even on a channel that has a filter, requires filter: "${JSON.stringify(toMatch)}"`);
+          log.warn(`Trying to emit an even on a channel that has a filter, requires filter: "${JSON.stringify(toMatch)}"`);
           return;
         }
 
@@ -74,7 +89,7 @@ const mediator = function mediator() {
 
     delete(channel, handler=null) {
       if (!channels[channel]) {
-        console.warn(`Delete: No handlers for channel "${channel}"`);
+        log.warn(`Delete: No handlers for channel "${channel}"`);
         return false;
       }
 
