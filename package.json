@@ -1,8 +1,15 @@
 {
   "name": "medi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Medi, a mediator that supports event filtering",
-  "keywords": ["dispatcher", "mediator", "pubsub", "eventbus", "event-filtering", "filtering"],
+  "keywords": [
+    "dispatcher",
+    "mediator",
+    "pubsub",
+    "eventbus",
+    "event-filtering",
+    "filtering"
+  ],
   "main": "mediator.js",
   "scripts": {
     "test": "./node_modules/.bin/ava"
