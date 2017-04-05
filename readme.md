@@ -1,5 +1,7 @@
 # Medi, a mediator that supports event filtering
 
+[![npm version](https://badge.fury.io/js/medi.svg)](https://www.npmjs.com/package/medi)
+
 ### What is an mediator?
 
 A mediator facilitates communication between objects without them knowing about each others existence. From wikipedia: "[A mediator] promotes loose coupling by keeping objects from referring to each other explicitly, and it allows their interaction to be varied independently."
