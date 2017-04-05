@@ -18,13 +18,12 @@ mediator.when('somethingHappend', data => {
 });
 
 mediator.emit('somethingHappend', { foo: 'bar' });
-
 ```
 
 #### Deleting an channel
 
 ```js
-const mediator = mediator();
+const mediator = medi();
 
 const notCalledHandler = data => {
   console.log(data);
@@ -33,13 +32,12 @@ const notCalledHandler = data => {
 mediator.when('somethingHappend', notCalledHandler); // handler will not be called
 mediator.delete('somethingHappend');
 mediator.emit('somethingHappend', { foo: 'bar' });
-
 ```
 
 #### Deleting an specific handler on a channel
 
 ```js
-const mediator = mediator();
+const mediator = medi();
 
 const calledHandler = data => {
   console.log(data);
@@ -53,13 +51,11 @@ mediator.when('somethingHappend', notCalledHandler); // will not be called
 mediator.when('somethingHappend', calledHandler); // will be called
 mediator.delete('somethingHappend', notCalledHandler);
 mediator.emit('somethingHappend', { foo: 'bar' });
-
 ```
 
 #### Filtering events
 ```js
-
-const mediator = mediator();
+const mediator = medi();
 
 const filter = {
   someprop: 'matchingvalue'
@@ -77,13 +73,12 @@ const handler = data => {
 mediator.when('somethingHappend', filter, handler);
 mediator.emit('somethingHappend', filter, { foo: 'bar' });
 mediator.emit('somethingHappend', notMatchingFilter, { foo: 'bar' }); // will not trigger the handler
-
 ```
 
 #### Loose coupling example.
 
 ```js
-const mediator = mediator();
+const mediator = medi();
 
 const user = {
   name: null,
@@ -112,11 +107,10 @@ user.name = 'Jane Doe';
 user.register();
 // this will trigger the notification modal to show because
 // it's listing to the 'userHasRegistered' event that the user will emit.
-
 ```
 The two components do not explicitly know about each others existance they only listen to
 the events on the mediator and act on those.
 
 ### Testing
 
-Install dependencies with `npm install` and run `npm test` or `npm test -- --watch` for watching
+Install dependencies with `npm install` and run `npm test` or `npm test -- --watch` for watching.
