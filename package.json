@@ -1,7 +1,8 @@
 {
-  "name": "mediator",
-  "version": "1.0.0",
-  "description": "### What is an mediator?",
+  "name": "medi",
+  "version": "0.1.0",
+  "description": "Medi, a mediator that supports event filtering",
+  "keywords": ["dispatcher", "mediator", "pubsub", "eventbus", "event-filtering", "filtering"],
   "main": "mediator.js",
   "scripts": {
     "test": "./node_modules/.bin/ava"
@@ -10,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/ricklancee/mediator.git"
   },
-  "author": "",
+  "author": "Rick Lancee",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ricklancee/mediator/issues"

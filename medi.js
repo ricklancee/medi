@@ -1,21 +1,21 @@
 "use strict";
 
-const mediator = function mediator(opts = { log:false }) {
+const medi = function medi(opts = { log:false }) {
   const channels = {};
-  const shouldLog = opts.log || false;
+  const shouldLog = opts.log;
 
   const log = {
       info() {
         if (!shouldLog)
           return;
 
-        return console.info.apply(console, arguments);
+        return console.info(...arguments);
       },
       warn() {
         if (!shouldLog)
           return;
 
-        return console.warn.apply(console, arguments);
+        return console.warn(...arguments);
       }
   };
 
@@ -117,4 +117,4 @@ const mediator = function mediator(opts = { log:false }) {
   };
 };
 
-export default mediator;
+export default medi;
