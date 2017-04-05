@@ -19,7 +19,7 @@
     "url": "git+https://github.com/ricklancee/medi.git"
   },
   "author": "Rick Lancee",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ricklancee/medi/issues"
   },
