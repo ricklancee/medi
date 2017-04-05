@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ricklancee/mediator.git"
+    "url": "git+https://github.com/ricklancee/medi.git"
   },
   "author": "Rick Lancee",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ricklancee/mediator/issues"
+    "url": "https://github.com/ricklancee/medi/issues"
   },
-  "homepage": "https://github.com/ricklancee/mediator#readme",
+  "homepage": "https://github.com/ricklancee/medi#readme",
   "devDependencies": {
     "ava": "^0.17.0",
     "sinon": "^1.17.6"
