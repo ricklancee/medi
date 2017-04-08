@@ -12,7 +12,8 @@
   ],
   "main": "mediator.js",
   "scripts": {
-    "test": "./node_modules/.bin/ava"
+    "test": "nyc ava",
+    "report": "nyc report --reporter=html"
   },
   "repository": {
     "type": "git",
@@ -30,12 +31,17 @@
   },
   "ava": {
     "require": [
-      "babel-register"
+      "babel-core/register"
     ]
   },
   "babel": {
-    "presets": [
-      "es2015-node4"
-    ]
+    "presets": ["es2015-node4"],
+		"plugins": ["transform-runtime"],
+		"ignore": "test.js",
+		"env": {
+			"development": {
+				"sourceMaps": "inline"
+			}
+		}
   }
 }
