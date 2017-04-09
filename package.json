@@ -1,6 +1,6 @@
 {
   "name": "medi",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Medi, a mediator that supports event filtering",
   "keywords": [
     "dispatcher",
@@ -35,13 +35,17 @@
     ]
   },
   "babel": {
-    "presets": ["es2015-node4"],
-		"plugins": ["transform-runtime"],
-		"ignore": "test.js",
-		"env": {
-			"development": {
-				"sourceMaps": "inline"
-			}
-		}
+    "presets": [
+      "es2015-node4"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ],
+    "ignore": "test.js",
+    "env": {
+      "development": {
+        "sourceMaps": "inline"
+      }
+    }
   }
 }
