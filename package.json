@@ -10,7 +10,7 @@
     "event-filtering",
     "filtering"
   ],
-  "main": "mediator.js",
+  "main": "medi.js",
   "scripts": {
     "test": "nyc ava",
     "report": "nyc report --reporter=html"
