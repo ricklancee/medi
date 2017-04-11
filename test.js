@@ -9,7 +9,7 @@ test.beforeEach(t => {
   t.context.mediator = medi();
 });
 
-test('handler a message', t => {
+test('handler a message', async t => {
   const handlerFn = sinon.spy();
 
   t.context.mediator.when('somechannel', handlerFn);
@@ -18,7 +18,7 @@ test('handler a message', t => {
   t.true(handlerFn.calledWith('somemessage'));
 });
 
-test('multiple handlers will be called', t => {
+test('multiple handlers will be called', async t => {
   const handlerOneFn = sinon.spy();
   const handlerTwoFn = sinon.spy();
 
@@ -30,7 +30,7 @@ test('multiple handlers will be called', t => {
   t.true(handlerTwoFn.calledWith('somemessage'));
 });
 
-test('delete a channel', t => {
+test('delete a channel', async t => {
   const handlerFn = sinon.spy();
   t.context.mediator.when('somechannel', handlerFn);
 
@@ -41,7 +41,7 @@ test('delete a channel', t => {
   t.false(handlerFn.called);
 });
 
-test('delete a specific handler on a channel', t => {
+test('delete a specific handler on a channel', async t => {
   const notCalledHandlerFn = sinon.spy();
   const calledHandlerFn = sinon.spy();
 
@@ -56,7 +56,7 @@ test('delete a specific handler on a channel', t => {
   t.true(calledHandlerFn.calledWith('somemessage'));
 });
 
-test('filter message handlers', t => {
+test('filter message handlers', async t => {
   const notCalledHandlerFn = sinon.spy();
   const calledHandlerFn = sinon.spy();
 
@@ -69,7 +69,7 @@ test('filter message handlers', t => {
   t.true(calledHandlerFn.calledWith('somemessage'));
 });
 
-test('calling emit with a filter on a channel without a filter, should not work', t => {
+test('calling emit with a filter on a channel without a filter, should not work', async t => {
   const notCalledHandlerFn = sinon.spy();
 
   t.context.mediator.when('somechannel', notCalledHandlerFn);
@@ -78,7 +78,7 @@ test('calling emit with a filter on a channel without a filter, should not work'
   t.false(notCalledHandlerFn.called);
 });
 
-test('console will be called when logging is on', t => {
+test('console will be called when logging is on', async t => {
   t.context.mediator = medi({log: true});
 
   t.context.mediator.when('somechannel', () => {});
@@ -100,7 +100,7 @@ test('console will be called when logging is on', t => {
   ]);
 });
 
-test('console will not be called when logging is off', t => {
+test('console will not be called when logging is off', async t => {
   t.context.mediator = medi({log: false});
 
   t.context.mediator.when('somechannel', () => {});
