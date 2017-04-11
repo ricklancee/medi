@@ -1,4 +1,4 @@
-# Medi, a mediator that supports event filtering
+# Medi, a mediator that supports event filtering and promises
 
 [![npm version](https://badge.fury.io/js/medi.svg)](https://www.npmjs.com/package/medi)
 
@@ -16,7 +16,7 @@ import medi from 'medi';
 const mediator = medi();
 
 mediator.when('somethingHappend', data => {
-  // do something
+  // date = { foo: bar }
 });
 
 mediator.when('somethingHappend', data => {
