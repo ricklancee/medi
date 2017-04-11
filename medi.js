@@ -31,22 +31,21 @@ const medi = function medi(opts = { log:false }) {
     return true;
   };
 
+  const getFirstAndOrSecondArgs = function(args) {
+      if (args.length === 1) {
+        return [args[0], null];
+      }
+
+      return [args[1], args[0]];
+  };
+
   return {
     when(channel, ...args) {
       if (!channels[channel]) {
         channels[channel] = [];
       }
 
-      let handler, filter;
-
-      if (args.length === 1) {
-        handler = args[0];
-        filter = null;
-      }
-
-      if (args.length === 2) {
-        [filter, handler] = args;
-      }
+      const [handler, filter] = getFirstAndOrSecondArgs(args);
 
       channels[channel].push({ filter, handler });
 
@@ -59,16 +58,7 @@ const medi = function medi(opts = { log:false }) {
         return;
       }
 
-      let payload, filter;
-
-      if (args.length === 1) {
-        payload = args[0];
-        filter = null;
-      }
-
-      if (args.length === 2) {
-        [filter, payload] = args;
-      }
+      const [payload, filter] = getFirstAndOrSecondArgs(args);
 
       log.info(`Emitting event: "${channel}" with payload:`, payload, ' and filter: ', filter);
 
