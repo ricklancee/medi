@@ -29,7 +29,7 @@ const medi = function medi(opts = { log:false }) {
     }
 
     return true;
-  }
+  };
 
   return {
     when(channel, ...args) {
