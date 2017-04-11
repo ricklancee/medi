@@ -57,16 +57,17 @@ test('delete a specific handler on a channel', async t => {
 });
 
 test('filter message handlers', async t => {
-  const notCalledHandlerFn = sinon.spy();
-  const calledHandlerFn = sinon.spy();
+  const notCalledHandlerFn = sinon.stub().returns(123);
+  const calledHandlerFn = sinon.stub().returns(312);
 
   t.context.mediator.when('somechannel', { someprop: 'notmatchingvalue' }, notCalledHandlerFn);
   t.context.mediator.when('somechannel', { someprop: 'valuetomatch' }, calledHandlerFn);
 
-  t.context.mediator.emit('somechannel', { someprop: 'valuetomatch' }, 'somemessage');
+  const result = await t.context.mediator.emit('somechannel', { someprop: 'valuetomatch' }, 'somemessage');
 
   t.false(notCalledHandlerFn.called);
   t.true(calledHandlerFn.calledWith('somemessage'));
+  t.deepEqual(result, [ 312 ]);
 });
 
 test('calling emit with a filter on a channel without a filter, should not work', async t => {
