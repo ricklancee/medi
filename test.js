@@ -78,6 +78,28 @@ test('calling emit with a filter on a channel without a filter, should not work'
   t.false(notCalledHandlerFn.called);
 });
 
+test('fireing promise after all when handlers have been called', async t => {
+  t.context.mediator.when('somechannel', () => {
+    return 1;
+  });
+  t.context.mediator.when('somechannel', () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(2);
+      }, 16);
+    })
+  });
+  t.context.mediator.when('somechannel', () => {});
+  t.context.mediator.when('somechannel', () => {
+    return 1;
+  });
+
+
+  const result = await t.context.mediator.emit('somechannel', 'somemessage');
+
+  t.deepEqual(result, [1, 2, 1]);
+});
+
 test('console will be called when logging is on', async t => {
   t.context.mediator = medi({log: true});
 

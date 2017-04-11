@@ -16,10 +16,20 @@ import medi from 'medi';
 const mediator = medi();
 
 mediator.when('somethingHappend', data => {
-  console.log(data); // {foo: 'bar'}
+  // do something
 });
 
-mediator.emit('somethingHappend', { foo: 'bar' });
+mediator.when('somethingHappend', data => {
+  // do something something else, like an fetch
+  // Any value or promise will be resolve to the promise on
+  // mediator.emit(...).then([  ])
+  return fetch('url').then(response => response.json());
+});
+
+mediator.emit('somethingHappend', { foo: 'bar' }).then(results => {
+  // do something when all when handlers were called.
+  // results will be [ json ];
+});
 ```
 
 #### Deleting an channel

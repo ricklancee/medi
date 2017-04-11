@@ -72,19 +72,25 @@ const medi = function medi(opts = { log:false }) {
 
       log.info(`Emitting event: "${channel}" with payload:`, payload, ' and filter: ', filter);
 
-      channels[channel].forEach(({handler, filter: toMatch}) => {
-        if (!filter && toMatch) {
-          log.warn(`Trying to emit an even on a channel that has a filter, requires filter: "${JSON.stringify(toMatch)}"`);
-          return;
-        }
+      const promises = [];
 
-        if (!filter || (toMatch && matchesFilter(filter, toMatch))) {
-          handler(payload);
-          return;
-        }
+      channels[channel].forEach(({handler, filter: toMatch}) => {
+          if (!filter && toMatch) {
+            log.warn(`Trying to emit an even on a channel that has a filter, requires filter: "${JSON.stringify(toMatch)}"`);
+            return;
+          }
+
+          if (!filter || (toMatch && matchesFilter(filter, toMatch))) {
+            const result = handler(payload);
+            if (result !== false && result !== undefined) {
+              promises.push(new Promise(resolve => {
+                resolve(result);
+              }));
+            }
+          }
       });
 
-      return this;
+      return Promise.all(promises);
     },
 
     delete(channel, handler=null) {
