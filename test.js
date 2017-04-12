@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import medi from './medi';
 
 test.beforeEach(t => {
-  console.warn = sinon.spy();
-  console.info = sinon.spy();
+  t.context.consoleWarn = console.warn = sinon.spy();
+  t.context.consoleInfo = console.info = sinon.spy();
 
   t.context.mediator = medi();
 });
@@ -56,7 +56,32 @@ test('delete a specific handler on a channel', async t => {
   t.true(calledHandlerFn.calledWith('somemessage'));
 });
 
+test('delete a specific handler that doesn\'t exists anymore', async t => {
+  t.context.mediator = medi({log: true});
+  t.context.mediator.when('somechannel', () => {});
+  t.context.mediator.delete('somechannel');
+  t.context.mediator.delete('somechannel');
+
+  t.deepEqual(t.context.consoleWarn.args[0], [
+    'Delete(): No handlers for channel \"somechannel\"; nothing to delete'
+  ]);
+});
+
+test('Trying to delete a handler that doesn\'t exists on the channel should not work', async t => {
+  t.context.mediator = medi({log: true});
+  const handler = () => {};
+  const secondHandlerThatDoesntExist = () => {};
+
+  t.context.mediator.when('somechannel', handler);
+  t.context.mediator.delete('somechannel', secondHandlerThatDoesntExist);
+
+  t.deepEqual(t.context.consoleWarn.args[0], [
+    'Delete(): Given handler does not exists on channel \"somechannel\"'
+  ]);
+});
+
 test('filter message handlers', async t => {
+  t.context.mediator = medi({log: true});
   const notCalledHandlerFn = sinon.stub().returns(123);
   const calledHandlerFn = sinon.stub().returns(312);
 
@@ -68,6 +93,24 @@ test('filter message handlers', async t => {
   t.false(notCalledHandlerFn.called);
   t.true(calledHandlerFn.calledWith('somemessage'));
   t.deepEqual(result, [ 312 ]);
+
+  t.deepEqual(t.context.consoleWarn.args[0], [
+    'Emit(): Not calling channel \"somechannel\", given filter does not match channel\'s filter'
+  ]);
+});
+
+test('calling a channel that has a filter without specifing a filter should not be called', async t => {
+  t.context.mediator = medi({log: true});
+  const notCalledHandlerFn = sinon.spy();
+
+  t.context.mediator.when('somechannel', { filter: 'somefiltervalue' }, notCalledHandlerFn);
+  t.context.mediator.emit('somechannel', 'somemessage');
+
+  t.false(notCalledHandlerFn.called);
+
+  t.deepEqual(t.context.consoleWarn.args[0], [
+    'Emit(): Not calling channel \"somechannel\", channel has a filter; no filter given'
+  ]);
 });
 
 test('calling emit with a filter on a channel without a filter, should not work', async t => {
@@ -107,18 +150,18 @@ test('console will be called when logging is on', async t => {
   t.context.mediator.when('somechannel', () => {});
   t.context.mediator.emit('somechannel', 'somemessage');
 
-  t.deepEqual(console.info.args[0], [
-    'Emitting event: \"somechannel\" with payload:',
+  t.deepEqual(t.context.consoleInfo.args[0], [
+    'Emit(): Emitting event \"somechannel\" with payload:',
     'somemessage',
-    ' and filter: ',
+    'and filter: ',
     null
   ]);
 
   t.context.mediator.delete('somechannel');
   t.context.mediator.emit('somechannel', 'somemessage');
 
-  t.deepEqual(console.warn.args[0], [
-    'Emit: No handlers for event: \"somechannel\", args: ',
+  t.deepEqual(t.context.consoleWarn.args[0], [
+    'Emit(): No handlers for event \"somechannel\", args: ',
     'somemessage'
   ]);
 });
@@ -129,10 +172,10 @@ test('console will not be called when logging is off', async t => {
   t.context.mediator.when('somechannel', () => {});
   t.context.mediator.emit('somechannel', 'somemessage');
 
-  t.false(console.info.called);
+  t.false(t.context.consoleInfo.called);
 
   t.context.mediator.delete('somechannel');
   t.context.mediator.emit('somechannel', 'somemessage');
 
-  t.false(console.warn.called);
+  t.false(t.context.consoleWarn.called);
 });

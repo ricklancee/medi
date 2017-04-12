@@ -54,29 +54,36 @@ const medi = function medi(opts = { log:false }) {
 
     emit(channel, ...args) {
       if (!channels[channel]) {
-        log.warn(`Emit: No handlers for event: "${channel}", args: `, ...args);
+        log.warn(`Emit(): No handlers for event "${channel}", args: `, ...args);
         return;
       }
 
       const [payload, filter] = getFirstAndOrSecondArgs(args);
 
-      log.info(`Emitting event: "${channel}" with payload:`, payload, ' and filter: ', filter);
+      log.info(`Emit(): Emitting event "${channel}" with payload:`, payload, 'and filter: ', filter);
 
       const promises = [];
 
-      channels[channel].forEach(({handler, filter: toMatch}) => {
-          if (!filter && toMatch) {
-            log.warn(`Trying to emit an even on a channel that has a filter, requires filter: "${JSON.stringify(toMatch)}"`);
-            return;
-          }
+      channels[channel].filter(({ filter: toMatch }) => {
+        // If we call a channel that has a filter without specifing a filter: abort.
+        if (!filter && toMatch) {
+          log.warn(`Emit(): Not calling channel "${ channel }", channel has a filter; no filter given`);
+          return false;
+        }
 
-          if (!filter || (toMatch && matchesFilter(filter, toMatch))) {
-            const result = handler(payload);
-            if (result !== false && result !== undefined) {
-              promises.push(new Promise(resolve => {
-                resolve(result);
-              }));
-            }
+        // If we call a channel that has a filter but the given filter does not match: abort.
+        if (filter && !(toMatch && matchesFilter(filter, toMatch))) {
+          log.warn(`Emit(): Not calling channel "${ channel }", given filter does not match channel's filter`);
+          return false;
+        }
+
+        return true;
+      }).forEach(({ handler }) => {
+          // Call each handler; resolve the result if something other than nothing
+          // was returned.
+          const result = handler(payload);
+          if (result !== undefined) {
+            promises.push(Promise.resolve(result));
           }
       });
 
@@ -85,7 +92,7 @@ const medi = function medi(opts = { log:false }) {
 
     delete(channel, handler=null) {
       if (!channels[channel]) {
-        log.warn(`Delete: No handlers for channel "${channel}"`);
+        log.warn(`Delete(): No handlers for channel "${channel}"; nothing to delete`);
         return false;
       }
 
@@ -94,7 +101,7 @@ const medi = function medi(opts = { log:false }) {
         return this;
       }
 
-      const index = channels[channel].findIndex(({handler: channelHandler}) => {
+      const index = channels[channel].findIndex(({ handler: channelHandler }) => {
         if (channelHandler === handler) {
           return true;
         }
@@ -103,6 +110,7 @@ const medi = function medi(opts = { log:false }) {
       });
 
       if (index === -1) {
+        console.warn(`Delete(): Given handler does not exists on channel "${channel}"`);
         return false;
       }
 
