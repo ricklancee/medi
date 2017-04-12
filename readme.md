@@ -1,6 +1,7 @@
 # Medi, a mediator that supports event filtering and promises
 
 [![npm version](https://badge.fury.io/js/medi.svg)](https://www.npmjs.com/package/medi)
+![code coverage 100%](https://img.shields.io/badge/coverage-100%-brightgreen.svg)
 
 ### What is an mediator?
 
@@ -10,26 +11,51 @@ A mediator facilitates communication between objects without them knowing about 
 
 Install medi via npm or yarn: `npm install medi` or `yarn add medi`.
 
+The mediator follows your standard pup/sub pattern. Listen to a channel with `mediator.when('channel', handler())`. And emit on that channel with a given payload `mediator.emit('channel', payload)`.
+
+When all handlers have been called a promise on `mediator.emit` resolves with any values that were returned in the handlers. If a promise was returned `emit` will wait for that promise to be resolved.
+
 ```js
 import medi from 'medi';
 
 const mediator = medi();
 
 mediator.when('somethingHappend', data => {
-  // date = { foo: bar }
+  // data = { foo: bar }
 });
 
 mediator.when('somethingHappend', data => {
-  // do something something else, like an fetch
-  // Any value or promise will be resolve to the promise on
-  // mediator.emit(...).then([  ])
+  // Any value or promise returned will be resolved to the promise on
+  // mediator.emit.then()
   return fetch('url').then(response => response.json());
 });
 
 mediator.emit('somethingHappend', { foo: 'bar' }).then(results => {
   // do something when all when handlers were called.
-  // results will be [ json ];
+  // results = [ json ]
 });
+```
+
+#### Filtering events
+```js
+const mediator = medi();
+
+const filter = {
+  someprop: 'matchingvalue'
+};
+
+const notMatchingFilter = {
+  someprop: 'notmatchingvalue'
+}
+
+const handler = data => {
+  console.log(data);
+};
+
+
+mediator.when('somethingHappend', filter, handler);
+mediator.emit('somethingHappend', filter, { foo: 'bar' });
+mediator.emit('somethingHappend', notMatchingFilter, { foo: 'bar' }); // will not trigger the handler
 ```
 
 #### Deleting an channel
@@ -63,28 +89,6 @@ mediator.when('somethingHappend', notCalledHandler); // will not be called
 mediator.when('somethingHappend', calledHandler); // will be called
 mediator.delete('somethingHappend', notCalledHandler);
 mediator.emit('somethingHappend', { foo: 'bar' });
-```
-
-#### Filtering events
-```js
-const mediator = medi();
-
-const filter = {
-  someprop: 'matchingvalue'
-};
-
-const notMatchingFilter = {
-  someprop: 'notmatchingvalue'
-}
-
-const handler = data => {
-  console.log(data);
-};
-
-
-mediator.when('somethingHappend', filter, handler);
-mediator.emit('somethingHappend', filter, { foo: 'bar' });
-mediator.emit('somethingHappend', notMatchingFilter, { foo: 'bar' }); // will not trigger the handler
 ```
 
 #### Loose coupling example.
@@ -125,4 +129,5 @@ the events on the mediator and act on those.
 
 ### Testing
 
-Install dependencies with `npm install` and run `npm test` or `npm test -- --watch` for watching.
+Install dependencies with `yarn install` and run `yarn test` or `yarn test -- --watch` for watching. To see a coverage report run 
+yarn report (create the directories `.nyc_output/` and `coverage/` first).
