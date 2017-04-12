@@ -1,7 +1,7 @@
 # Medi, a mediator that supports event filtering and promises
 
 [![npm version](https://badge.fury.io/js/medi.svg)](https://www.npmjs.com/package/medi)
-![code coverage 100%](https://img.shields.io/badge/coverage-100%-brightgreen.svg)
+![code coverage 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)
 
 ### What is an mediator?
 
