@@ -1,19 +1,26 @@
-# Medi, a mediator that supports event filtering and promises
+## Medi; a mediator that supports event filtering and promises
 
 [![npm version](https://badge.fury.io/js/medi.svg)](https://www.npmjs.com/package/medi)
 ![code coverage 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)
 
 ### What is an mediator?
 
-A mediator facilitates communication between objects without them knowing about each others existence. From wikipedia: "[A mediator] promotes loose coupling by keeping objects from referring to each other explicitly, and it allows their interaction to be varied independently."
+A mediator facilitates communication between objects without them referring to each other explicitly. 
 
 #### Usage
 
-Install medi via npm or yarn: `npm install medi` or `yarn add medi`.
+Install medi via npm or yarn
 
-The mediator follows your standard pup/sub pattern. Listen to a channel with `mediator.when('channel', handler())`. And emit on that channel with a given payload `mediator.emit('channel', payload)`.
+```bash
+npm install medi
+yarn add medi  # or use yarn
+```
+
+The mediator follows your standard pup/sub pattern. Listen to a channel with `mediator.when('channel', handlerFn)` and emit on that channel with a given payload `mediator.emit('channel', payload)`.
 
 When all handlers have been called a promise on `mediator.emit` resolves with any values that were returned in the handlers. If a promise was returned `emit` will wait for that promise to be resolved.
+
+**Basic example:**  
 
 ```js
 import medi from 'medi';
@@ -124,10 +131,10 @@ user.register();
 // this will trigger the notification modal to show because
 // it's listing to the 'userHasRegistered' event that the user will emit.
 ```
-The two components do not explicitly know about each others existance they only listen to
+The two components do not explicitly know about each others existence they only listen to
 the events on the mediator and act on those.
 
 ### Testing
 
 Install dependencies with `yarn install` and run `yarn test` or `yarn test -- --watch` for watching. To see a coverage report run 
-yarn report (create the directories `.nyc_output/` and `coverage/` first).
+`yarn report` (create the directories `.nyc_output/` and `coverage/` first).
