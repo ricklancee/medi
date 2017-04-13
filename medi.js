@@ -79,11 +79,10 @@ const medi = function medi(opts = { log:false }) {
 
         return true;
       }).forEach(({ handler }) => {
-          // Call each handler; resolve the result if something other than nothing
-          // was returned.
+          // Call each handler; resolve the result if something other than nothing was returned.
           const result = handler(payload);
           if (result !== undefined) {
-            promises.push(Promise.resolve(result));
+            promises.push(result);
           }
       });
 
